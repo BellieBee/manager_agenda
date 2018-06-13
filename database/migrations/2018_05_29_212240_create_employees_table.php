@@ -21,8 +21,8 @@ class CreateEmployeesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('address');
-            $table->string('municipality');
-            $table->string('department');
+            $table->integer('department_id')->unsigned();
+            $table->foreign('department_id')->references('id')->on('departments');
             $table->string('phone_1');
             $table->string('phone_2')->nullable();
             $table->string('email');

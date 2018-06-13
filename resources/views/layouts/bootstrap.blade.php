@@ -3,6 +3,7 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <!-- Optional JavaScript -->
@@ -10,6 +11,7 @@
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
@@ -28,13 +30,24 @@
       </div>
       <div class="col-9">
         <ul class="nav nav-pills justify-content-end">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Profile</a>
-              <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-            </div>
-          </li>
+          @guest
+            <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+          @else
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
+                      {{ __('Logout') }}
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+              </div>
+            </li>
+          @endguest 
         </ul>
         <div class="tab-content" id="v-pills-tabContent">
           <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
